@@ -434,7 +434,7 @@ struct mem_timings {
 #define ABP_SFR_SLV1_SINGLE_ADDRMAP_START_OFFSET	0x828
 #define ABP_SFR_SLV1_SINGLE_ADDRMAP_END_OFFSET	0x830
 
-#ifdef CONFIG_ORIGEN
+#if defined(CONFIG_ORIGEN) || defined(CONFIG_TINY4412)
 /* Interleave: 2Bit, Interleave_bit1: 0x15, Interleave_bit0: 0x7 */
 #define APB_SFR_INTERLEAVE_CONF_VAL	0x20001507
 #define APB_SFR_ARBRITATION_CONF_VAL	0x00000001
