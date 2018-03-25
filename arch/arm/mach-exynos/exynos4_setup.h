@@ -79,7 +79,7 @@
 #define MUX_DMC_BUS_SEL_SCLKAPLL	0x1
 #define CLK_SRC_DMC_VAL			((MUX_PWI_SEL_XUSBXTI << 16) \
 					| (MUX_DPHY_SEL_SCLKMPLL << 8) \
-					| (MUX_DMC_BUS_SEL_SCLKMPLL << 4))
+					| (MUX_DMC_BUS_SEL_SCLKMPLL << 4)) | (1 << 12)
 
 /* CLK_DIV_DMC0 */
 #define CORE_TIMERS_RATIO	0x1
@@ -136,7 +136,7 @@
 /* CLK_SRC_TOP1 */
 #define VPLLSRC_SEL_FINPLL	0x0
 #define VPLLSRC_SEL_SCLKHDMI24M	0x1
-#define CLK_SRC_TOP1_VAL	(VPLLSRC_SEL_FINPLL)
+#define CLK_SRC_TOP1_VAL	(1 << 12)
 
 /* CLK_DIV_TOP */
 #define ONENAND_RATIO		0x0
@@ -487,14 +487,14 @@ struct mem_timings {
 #define AREF_DISABLE		(0 << 5)
 #define DRV_TYPE_DISABLE	(0 << 6)
 #define CHIP0_NOT_EMPTY		(0 << 8)
-#define CHIP1_NOT_EMPTY		(0 << 9)
+#define CHIP1_IS_EMPTY		(1 << 9)
 #define DQ_SWAP_DISABLE		(0 << 10)
 #define QOS_FAST_DISABLE	(0 << 11)
 #define RD_FETCH		(0x3 << 12)
 #define TIMEOUT_LEVEL0		(0xFFF << 16)
 #define CONCONTROL_VAL		(ASYNC | CLK_RATIO | DIV_PIPE | AWR_ON\
 				| AREF_DISABLE | DRV_TYPE_DISABLE\
-				| CHIP0_NOT_EMPTY | CHIP1_NOT_EMPTY\
+				| CHIP0_NOT_EMPTY | CHIP1_IS_EMPTY\
 				| DQ_SWAP_DISABLE | QOS_FAST_DISABLE\
 				| RD_FETCH | TIMEOUT_LEVEL0)
 
@@ -506,29 +506,24 @@ struct mem_timings {
 #define ADD_LAT_PALL		(1 << 6)
 #define MEM_TYPE_DDR3		(0x6 << 8)
 #define MEM_WIDTH_32		(0x2 << 12)
-#define NUM_CHIP_2		(1 << 16)
+#define NUM_CHIP_1		(0 << 16)
 #define BL_8			(0x3 << 20)
 #define MEMCONTROL_VAL		(CLK_STOP_DISABLE | DPWRDN_DISABLE\
 				| DPWRDN_TYPE | TP_DISABLE | DSREF_DIABLE\
 				| ADD_LAT_PALL | MEM_TYPE_DDR3 | MEM_WIDTH_32\
-				| NUM_CHIP_2 | BL_8)
+				| NUM_CHIP_1 | BL_8)
 
 
 #define CHIP_BANK_8		(0x3 << 0)
-#define CHIP_ROW_14		(0x2 << 4)
+#define CHIP_ROW_15		(0x3 << 4)
 #define CHIP_COL_10		(0x3 << 8)
-#define CHIP_MAP_INTERLEAVED	(1 << 12)
-#define CHIP_MASK		(0xe0 << 16)
-#ifdef CONFIG_MIU_LINEAR
+#define CHIP_MAP_INTERLEAVED	(0x2 << 12)
+#define CHIP_MASK		(0xC0 << 16)
 #define CHIP0_BASE		(0x40 << 24)
-#define CHIP1_BASE		(0x60 << 24)
-#else
-#define CHIP0_BASE		(0x20 << 24)
-#define CHIP1_BASE		(0x40 << 24)
-#endif
-#define MEMCONFIG0_VAL		(CHIP_BANK_8 | CHIP_ROW_14 | CHIP_COL_10\
+#define CHIP1_BASE		(0xA0 << 24)
+#define MEMCONFIG0_VAL		(CHIP_BANK_8 | CHIP_ROW_15 | CHIP_COL_10\
 				| CHIP_MAP_INTERLEAVED | CHIP_MASK | CHIP0_BASE)
-#define MEMCONFIG1_VAL		(CHIP_BANK_8 | CHIP_ROW_14 | CHIP_COL_10\
+#define MEMCONFIG1_VAL		(CHIP_BANK_8 | CHIP_ROW_15 | CHIP_COL_10\
 				| CHIP_MAP_INTERLEAVED | CHIP_MASK | CHIP1_BASE)
 
 #define TP_CNT			(0xff << 24)
@@ -556,7 +551,7 @@ struct mem_timings {
 
 #define CONTROL2_VAL		0x00000000
 
-#ifdef CONFIG_ORIGEN
+#if defined(CONFIG_ORIGEN) || defined(CONFIG_TINY4412)
 #define TIMINGREF_VAL		0x000000BB
 #define TIMINGROW_VAL		0x4046654f
 #define	TIMINGDATA_VAL		0x46400506
