@@ -346,6 +346,7 @@ void reset_misc(void)
 	struct gpio_desc gpio = {};
 	int node;
 
+    printf("%s\n", __func__);
 	node = fdt_node_offset_by_compatible(gd->fdt_blob, 0,
 			"samsung,emmc-reset");
 	if (node < 0)

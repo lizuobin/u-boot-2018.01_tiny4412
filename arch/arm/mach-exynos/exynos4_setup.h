@@ -218,7 +218,7 @@
 				| (MMC2_RATIO << 0))
 
 /* CLK_DIV_FSYS3 */
-#define MMC4_RATIO		0xF
+#define MMC4_RATIO		0x7
 #define MMC4_PRE_RATIO		0x0
 #define CLK_DIV_FSYS3_VAL	((MMC4_PRE_RATIO << 8) \
 				| (MMC4_RATIO << 0))
@@ -344,9 +344,9 @@
 					| (sdiv << 0))
 
 /* APLL_CON0 */
-#define APLL_MDIV		0xFA
-#define APLL_PDIV		0x6
-#define APLL_SDIV		0x1
+#define APLL_MDIV		125
+#define APLL_PDIV		3
+#define APLL_SDIV		0
 #define APLL_CON0_VAL		SET_PLL(APLL_MDIV, APLL_PDIV, APLL_SDIV)
 
 /* APLL_CON1 */

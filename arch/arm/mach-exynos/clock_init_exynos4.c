@@ -38,9 +38,8 @@
  */
 void system_clock_init(void)
 {
-	struct exynos4_clock *clk =
-			(struct exynos4_clock *)samsung_get_base_clock();
-
+	struct exynos4x12_clock *clk =
+			(struct exynos4x12_clock *)samsung_get_base_clock();
 	writel(CLK_SRC_CPU_VAL, &clk->src_cpu);
 
 	sdelay(0x10000);
@@ -55,7 +54,7 @@ void system_clock_init(void)
 	writel(CLK_SRC_CAM_VAL, &clk->src_cam);
 	writel(CLK_SRC_MFC_VAL, &clk->src_mfc);
 	writel(CLK_SRC_G3D_VAL, &clk->src_g3d);
-	writel(CLK_SRC_LCD0_VAL, &clk->src_lcd0);
+//	writel(CLK_SRC_LCD0_VAL, &clk->src_lcd0);
 
 	sdelay(0x10000);
 
@@ -73,7 +72,7 @@ void system_clock_init(void)
 	writel(CLK_DIV_CAM_VAL, &clk->div_cam);
 	writel(CLK_DIV_MFC_VAL, &clk->div_mfc);
 	writel(CLK_DIV_G3D_VAL, &clk->div_g3d);
-	writel(CLK_DIV_LCD0_VAL, &clk->div_lcd0);
+//	writel(CLK_DIV_LCD0_VAL, &clk->div_lcd0);
 
 	/* Set PLL locktime */
 	writel(PLL_LOCKTIME, &clk->apll_lock);
@@ -89,6 +88,5 @@ void system_clock_init(void)
 	writel(EPLL_CON0_VAL, &clk->epll_con0);
 	writel(VPLL_CON1_VAL, &clk->vpll_con1);
 	writel(VPLL_CON0_VAL, &clk->vpll_con0);
-
 	sdelay(0x30000);
 }

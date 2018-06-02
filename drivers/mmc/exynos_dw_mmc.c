@@ -115,7 +115,7 @@ static int exynos_dwmci_core_init(struct dwmci_host *host)
 #endif
 	host->board_init = exynos_dwmci_board_init;
 
-	host->caps = MMC_MODE_DDR_52MHz;
+	//host->caps = MMC_MODE_DDR_52MHz;
 	host->clksel = exynos_dwmci_clksel;
 	host->get_mmc_clk = exynos_dwmci_get_clk;
 
@@ -255,6 +255,46 @@ int exynos_dwmmc_init(const void *blob)
 	return err;
 }
 
+static void reset_mmc(void)
+{
+	struct gpio_desc reset_gpio = {};
+	struct gpio_desc cd_gpio = {};
+	int node;
+
+	node = fdt_node_offset_by_compatible(gd->fdt_blob, 0,
+			"samsung,emmc-reset");
+	if (node < 0)
+		return;
+	
+    gpio_request_by_name_nodev(offset_to_ofnode(node), "cd-gpio", 0,
+				   &cd_gpio, GPIOD_IS_OUT);
+    
+    if (dm_gpio_is_valid(&cd_gpio)) {
+		dm_gpio_set_value(&cd_gpio, 1);
+		mdelay(10);
+	}else{
+        printf("emmc cd pin get error\n");
+    }
+
+    gpio_request_by_name_nodev(offset_to_ofnode(node), "reset-gpio", 0,
+				   &reset_gpio, GPIOD_IS_OUT);
+
+	if (dm_gpio_is_valid(&reset_gpio)) {
+		/*
+		 * Reset eMMC
+		 *
+		 * FIXME: Need to optimize delay time. Minimum 1usec pulse is
+		 *	  required by 'JEDEC Standard No.84-A441' (eMMC)
+		 *	  document but real delay time is expected to greater
+		 *	  than 1usec.
+		 */
+		dm_gpio_set_value(&reset_gpio, 0);
+		mdelay(10);
+		dm_gpio_set_value(&reset_gpio, 1);
+	}
+}
+
+
 #ifdef CONFIG_DM_MMC
 static int exynos_dwmmc_probe(struct udevice *dev)
 {
@@ -263,6 +303,8 @@ static int exynos_dwmmc_probe(struct udevice *dev)
 	struct dwmci_exynos_priv_data *priv = dev_get_priv(dev);
 	struct dwmci_host *host = &priv->host;
 	int err;
+
+    reset_mmc();
 
 	err = exynos_dwmci_get_config(gd->fdt_blob, dev_of_offset(dev), host);
 	if (err)

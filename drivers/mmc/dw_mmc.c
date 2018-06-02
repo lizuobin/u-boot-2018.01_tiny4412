@@ -497,7 +497,7 @@ void dwmci_setup_cfg(struct mmc_config *cfg, struct dwmci_host *host,
 	cfg->f_min = min_clk;
 	cfg->f_max = max_clk;
 
-	cfg->voltages = MMC_VDD_32_33 | MMC_VDD_33_34 | MMC_VDD_165_195;
+	cfg->voltages = MMC_VDD_165_195;
 
 	cfg->host_caps = host->caps;
 
