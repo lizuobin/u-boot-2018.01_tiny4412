@@ -54,7 +54,7 @@ void system_clock_init(void)
 	writel(CLK_SRC_CAM_VAL, &clk->src_cam);
 	writel(CLK_SRC_MFC_VAL, &clk->src_mfc);
 	writel(CLK_SRC_G3D_VAL, &clk->src_g3d);
-//	writel(CLK_SRC_LCD0_VAL, &clk->src_lcd0);
+	writel(CLK_SRC_LCD0_VAL, &clk->src_lcd);
 
 	sdelay(0x10000);
 
@@ -72,7 +72,7 @@ void system_clock_init(void)
 	writel(CLK_DIV_CAM_VAL, &clk->div_cam);
 	writel(CLK_DIV_MFC_VAL, &clk->div_mfc);
 	writel(CLK_DIV_G3D_VAL, &clk->div_g3d);
-//	writel(CLK_DIV_LCD0_VAL, &clk->div_lcd0);
+	writel(CLK_DIV_LCD0_VAL, &clk->div_lcd);
 
 	/* Set PLL locktime */
 	writel(PLL_LOCKTIME, &clk->apll_lock);
