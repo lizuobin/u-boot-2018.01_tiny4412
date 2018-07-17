@@ -88,7 +88,7 @@
 #define COPY2_RATIO		0x3
 #define DMCP_RATIO		0x1
 #define DMCD_RATIO		0x1
-#define DMC_RATIO		0x3
+#define DMC_RATIO		0x1
 #define DPHY_RATIO		0x1
 #define ACP_PCLK_RATIO	0x1
 #define ACP_RATIO		0x3
@@ -563,9 +563,9 @@ struct mem_timings {
 
 #if defined(CONFIG_ORIGEN) || defined(CONFIG_TINY4412)
 #define TIMINGREF_VAL		0x000000BB
-#define TIMINGROW_VAL		0x4046654f
-#define	TIMINGDATA_VAL		0x46400506
-#define	TIMINGPOWER_VAL		0x52000A3C
+#define TIMINGROW_VAL		0x6946654f
+#define	TIMINGDATA_VAL	    0x46460506
+#define	TIMINGPOWER_VAL		0x5200183c
 #else
 #define TIMINGREF_VAL		0x000000BC
 #ifdef DRAM_CLK_330
