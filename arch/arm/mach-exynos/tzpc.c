@@ -18,24 +18,23 @@ void tzpc_init(void)
 
 	start = samsung_get_base_tzpc();
 
-	if (cpu_is_exynos5())
-		end = start + ((EXYNOS5_NR_TZPC_BANKS - 1) * TZPC_BASE_OFFSET);
-	else if (cpu_is_exynos4())
-		end = start + ((EXYNOS4_NR_TZPC_BANKS - 1) * TZPC_BASE_OFFSET);
+	end = start + ((EXYNOS4_NR_TZPC_BANKS - 1) * TZPC_BASE_OFFSET);
 
 	for (addr = start; addr <= end; addr += TZPC_BASE_OFFSET) {
 		tzpc = (struct exynos_tzpc *)addr;
 
-		if (addr == start)
+		if (addr == start){
 			writel(R0SIZE, &tzpc->r0size);
-
-		writel(DECPROTXSET, &tzpc->decprot0set);
-		writel(DECPROTXSET, &tzpc->decprot1set);
-
-		if (cpu_is_exynos5() && (addr == end))
-			break;
-
-		writel(DECPROTXSET, &tzpc->decprot2set);
-		writel(DECPROTXSET, &tzpc->decprot3set);
+		    writel(DECPROTXSET, &tzpc->decprot0set);
+		    writel(DECPROTXSET, &tzpc->decprot1set);
+		    writel(0xbd,        &tzpc->decprot2set);
+		    writel(DECPROTXSET, &tzpc->decprot3set);
+        }else{
+            writel(DECPROTXSET, &tzpc->r0size);
+            writel(DECPROTXSET, &tzpc->decprot0set);
+            writel(DECPROTXSET, &tzpc->decprot1set);
+            writel(DECPROTXSET, &tzpc->decprot2set);
+            writel(DECPROTXSET, &tzpc->decprot3set);
+        }
 	}
 }
